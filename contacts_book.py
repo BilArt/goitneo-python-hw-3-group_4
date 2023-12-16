@@ -22,7 +22,7 @@ class Phone(Field):
         if not self.value.isdigit() or len (self.value) != 10:
             raise ValueError("Phone must be a 10-digit numeric value.")
 
-class Bithday(Field):
+class Birthday(Field):
     def __init__(self, value):
         super().__init__(value)
         self.validate_birhday()
@@ -149,35 +149,22 @@ def main():
             else:
                 print(f"Birthday nor found for {name}.")
 
-# Створення нової адресної книги
-book = AddressBook()
+        elif command[0] == "birthdays":
+            upcoming_birthdays = book.get_birthdays_per_week()
+            if upcoming_birthdays:
+                print("Upmcoming birthdays in the next week:")
+                for name in upcoming_birthdays:
+                    print(name)
+            else:
+                print("No upcoming birthdays in the next week.")
 
-# Створення запису для John
-john_record = Record("John")
-john_record.add_phone("1234567890")
-john_record.add_phone("5555555555")
+        elif command[0] in ["close", "exit"]:
+            print("Closing the program.")
+            break
 
-#Додавання запису John до адресної книги
-book.add_record(john_record)
+        else:
+            print("Invalid command. Try again.")
 
-# Створення та додавання нового запису для Jane
-jane_record = Record("Jane")
-jane_record.add_phone("9876543210")
-book.add_record(jane_record)
-
-#Виведення всіх записів у книзі
-for name, record in book.data.items():
-    print(record)
-
-# Знаходження та редагування телефону для John
-john = book.find("John")
-john.edit_phone("1234567890", "1112223333")
-
-print(john)  # Виведення: Contact name: John, phones: 1112223333; 5555555555
-
-# Пошук конкретного телефону у записі John
-found_phone = john.find_phone("5555555555")
-print(f"{john.name.value}: {found_phone}")  # Виведення 5555555555
-
-# Видалення запису Jane
-book.delete("Jane")
+if __name__ == "__main__":
+    main()
+    
