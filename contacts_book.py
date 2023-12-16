@@ -21,17 +21,19 @@ class Phone(Field):
     def validate_phone(self):
         if not self.value.isdigit() or len (self.value) != 10:
             raise ValueError("Phone must be a 10-digit numeric value.")
+        
 
 class Birthday(Field):
     def __init__(self, value):
         super().__init__(value)
-        self.validate_birhday()
+        self.validate_birthday()
 
     def validate_birthday(self):
         try:
             datetime.strptime(self.value, "%d.%m.%Y")
         except ValueError:
-            raise ValueError("Invalid birthday format. Use DD.MM.YYYY")
+            raise ValueError("Invalid birthday format. Use DD.MM.YYYY.")
+
 
 class Record:
     def __init__(self, name):
@@ -93,7 +95,23 @@ class AddressBook:
                     upcoming_birthdays.append(record.name.value)
 
         return upcoming_birthdays
+    
+
+def print_help():
+    print("Available commands:")
+    print("add [name] [phone]: Add a new contact with the specified name and phone number.")
+    print("change [name] [new phone]: Change the phone number for the specified contact.")
+    print("phone [name]: Show the phone number for the specified contact.")
+    print("all: Show all contacts in the address book.")
+    print("add-birthday [name] [birthday]: Add a birthday for the specified contact.")
+    print("show-birthday [name]: Show the birthday for the specified contact.")
+    print("birthdays: Show upcoming birthdays in the next week.")
+    print("hello or hi: Get a greeting from the bot.")
+    print("close or exit: Close the program.")
+    print("help: Show this list of commands.")
         
+
+# ... (попередній код залишається незмінним)
 
 def main():
     book = AddressBook()
@@ -109,7 +127,7 @@ def main():
             record = Record(name)
             record.add_phone(phone)
             book.add_record(record)
-            print(f"Contact {name} added with phpne {phone}.")
+            print(f"Contact {name} added with phone {phone}.")
 
         elif command[0] == "change":
             name, new_phone = command[1], command[2]
@@ -139,32 +157,42 @@ def main():
                 record.add_birthday(birthday)
                 print(f"Birthday added for {name}.")
             else:
-                print(f"Contact {name} nor found.")
-        
+                print(f"Contact {name} not found.")
+
         elif command[0] == "show-birthday":
             name = command[1]
             record = book.find(name)
             if record and record.birthday:
                 print(f"Birthday for {name}: {record.birthday}.")
             else:
-                print(f"Birthday nor found for {name}.")
+                print(f"Birthday not found for {name}.")
 
         elif command[0] == "birthdays":
             upcoming_birthdays = book.get_birthdays_per_week()
             if upcoming_birthdays:
-                print("Upmcoming birthdays in the next week:")
+                print("Upcoming birthdays in the next week:")
                 for name in upcoming_birthdays:
                     print(name)
             else:
                 print("No upcoming birthdays in the next week.")
 
+        elif command[0] in ["hello", "hi"]:
+            print("Hello! How can I help you today?")
+
         elif command[0] in ["close", "exit"]:
             print("Closing the program.")
             break
 
+        elif command[0] == "help":
+            print_help()
+
         else:
             print("Invalid command. Try again.")
 
+
 if __name__ == "__main__":
     main()
-    
+
+
+if __name__ == "__main__":
+    main()
