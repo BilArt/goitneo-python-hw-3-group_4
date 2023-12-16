@@ -95,6 +95,60 @@ class AddressBook:
         return upcoming_birthdays
         
 
+def main():
+    book = AddressBook()
+
+    while True:
+        command = input("Enter command: ").split()
+
+        if not command:
+            continue
+
+        if command[0] == "add":
+            name, phone = command[1], command[2]
+            record = Record(name)
+            record.add_phone(phone)
+            book.add_record(record)
+            print(f"Contact {name} added with phpne {phone}.")
+
+        elif command[0] == "change":
+            name, new_phone = command[1], command[2]
+            record = book.find(name)
+            if record:
+                record.edit_phone(record.phones[0].value, new_phone)
+                print(f"Phone number for {name} changed to {new_phone}.")
+            else:
+                print(f"Contact {name} not found.")
+
+        elif command[0] == "phone":
+            name = command[1]
+            record = book.find(name)
+            if record:
+                print(f"Phone number for {name}: {record.phones[0].value}.")
+            else:
+                print(f"Contact {name} not found.")
+
+        elif command[0] == "all":
+            for record in book.data.values():
+                print(record)
+
+        elif command[0] == "add-birthday":
+            name, birthday = command[1], command[2]
+            record = book.find(name)
+            if record:
+                record.add_birthday(birthday)
+                print(f"Birthday added for {name}.")
+            else:
+                print(f"Contact {name} nor found.")
+        
+        elif command[0] == "show-birthday":
+            name = command[1]
+            record = book.find(name)
+            if record and record.birthday:
+                print(f"Birthday for {name}: {record.birthday}.")
+            else:
+                print(f"Birthday nor found for {name}.")
+
 # Створення нової адресної книги
 book = AddressBook()
 
